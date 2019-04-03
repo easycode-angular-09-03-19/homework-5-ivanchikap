@@ -1,6 +1,7 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import { Album } from "../../interfaces/Album";
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { MyAlbum } from "../../interface/MyAlbum";
 import { AlbumsService } from "../../services/albums.service";
+import {AlertMessageService} from "../../services/alert-message.service";
 import {AlbumEventsService} from "../../services/album-events.service";
 
 @Component({
@@ -10,43 +11,46 @@ import {AlbumEventsService} from "../../services/album-events.service";
 })
 export class AlbumItemComponent implements OnInit {
   buttonValue = 'Edit';
-  editIsPressed = false;
-  @Input() item: Album;
-  @Output() outputMessage = new EventEmitter();
+  isPressed = false;
+  @Input() item: MyAlbum;
+  @Output() info = new EventEmitter();
   constructor(
     private albumsService: AlbumsService,
+    private alertMessageService: AlertMessageService,
     private albumEvents: AlbumEventsService
   ) { }
 
   ngOnInit() {
-    this.albumEvents.albumEditObservableSubject.subscribe((data) => {
+    this.albumEvents.finishEditAlbumObservableSubject.subscribe((data: MyAlbum) => {
       if (Object.keys(data).length !== 0 && this.item.id === data.id) {
-        console.log('final', data);
-        this.editIsPressed = false;
-        this.buttonValue = 'Edit';
         this.item.title = data.title;
-        this.outputMessage.emit('edited');
+        this.isPressed = false;
+        this.buttonValue = 'Edit';
+      }
+    })
+  }
+
+  onDelete() {
+    this.albumsService.deleteAlbum(this.item.id).subscribe((data) => {
+      if(data) {
+        this.info.emit({method: 'delete', id: this.item.id});
+
+        this.alertMessageService.emitShowMessage('delete');
       }
     });
   }
 
-  onDeleteHandler() {
-    this.outputMessage.emit('delete');
-    this.albumsService.deleteAlbum(this.item.id).subscribe((data) => {
-      this.albumEvents.emitDeleteAlbum(this.item.id);
-    });
-
-  }
-
-  onEditHandler() {
-    if (this.buttonValue === 'Edit') {
-      this.albumEvents.emitEditAlbum(this.item);
+  onEdit() {
+    if (this.buttonValue == 'Edit') {
       this.buttonValue = 'Cancel';
-      this.editIsPressed = true;
+      this.isPressed = true;
+      this.alertMessageService.emitShowMessage('editing');
+      this.albumEvents.emitEditAlbum(this.item);
     } else {
-      this.albumEvents.emitEditAlbum({});
       this.buttonValue = 'Edit';
-      this.editIsPressed = false;
+      this.isPressed = false;
+      this.alertMessageService.emitShowMessage('cancel');
+      this.albumEvents.emitCancelEditing(this.item);
     }
   }
 }

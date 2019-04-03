@@ -1,32 +1,41 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from "rxjs";
-import {Album} from "../interfaces/Album";
+import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
+import { MyAlbum } from "../interface/MyAlbum";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlbumEventsService {
-  private albumAddEventSource = new BehaviorSubject({});
-  public  albumAddEventObservableSubject = this.albumAddEventSource.asObservable();
 
-  private albumEditSource = new BehaviorSubject({});
-  public  albumEditObservableSubject = this.albumEditSource.asObservable();
+  private addAlbumEventSource = new BehaviorSubject({});
+  public addAlbumEventObservableSubject = this.addAlbumEventSource.asObservable();
 
-  private albumDeleteSource = new BehaviorSubject({});
-  public  albumDeleteObservableSubject = this.albumDeleteSource.asObservable();
+  private editAlbumEventSource = new BehaviorSubject({});
+  public editAlbumEventObservableSubject = this.editAlbumEventSource.asObservable();
 
-  constructor() {}
+  private cancelEditingEventSource = new BehaviorSubject({});
+  public cancelEditingEventObservableSubject = this.cancelEditingEventSource.asObservable();
 
-  emitAddNewAlbum(value: Album) {
-    console.log('Service:', value);
-    this.albumAddEventSource.next(value);
+  private finishEditAlbumEventSource = new BehaviorSubject({});
+  public finishEditAlbumObservableSubject = this.finishEditAlbumEventSource.asObservable();
+
+  constructor() { }
+
+  emitAddNewAlbum(value: MyAlbum) {
+    this.addAlbumEventSource.next(value);
   }
 
-  emitDeleteAlbum(albumId: number) {
-    this.albumDeleteSource.next(albumId);
+  emitEditAlbum(album: MyAlbum) {
+    this.editAlbumEventSource.next(album);
   }
 
-  emitEditAlbum(album: Album) {
-    this.albumEditSource.next(album);
+  emitCancelEditing(album: MyAlbum) {
+    this.cancelEditingEventSource.next(album);
   }
+
+  emitFinishEditAlbum(value: MyAlbum) {
+    console.log('ALBUMEvents', value);
+    this.finishEditAlbumEventSource.next(value);
+  }
+
 }

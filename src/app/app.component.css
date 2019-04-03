@@ -1,8 +1,0 @@
-app-alert-message {
-  position: fixed;
-  top: 40%;
-  left: 25%;
-  transform: translateX(-50%);
-  width: 200px;
-  height: auto;
-}

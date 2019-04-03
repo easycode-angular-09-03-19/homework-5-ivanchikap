@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AlbumEventsService} from "../../services/album-events.service";
-import {AlertMessageService} from "../../services/alert-message.service";
-
+import { AlertMessageService } from "../../services/alert-message.service";
 
 @Component({
   selector: 'app-alert-message',
@@ -10,38 +8,46 @@ import {AlertMessageService} from "../../services/alert-message.service";
 })
 export class AlertMessageComponent implements OnInit {
   isVisible = false;
-  msg = '';
-  action = '';
-
+  alertMessage = '';
   constructor(
-    public alertMessage: AlertMessageService
+    private alertMessagesService: AlertMessageService
   ) { }
 
   ngOnInit() {
-    this.alertMessage.alertMessageEventObservableSubject.subscribe((data: string) => {
-      this.action = data;
-      if (this.action === 'delete') {
-        this.msg = 'Album was deleted';
+    this.alertMessagesService.alertMessageAddObservableSubject.subscribe((data: string) => {
+      if (data === 'delete') {
         this.isVisible = true;
-        setTimeout(() => {
-          this.isVisible = false;
-          }, 2000);
-      }
-      if (this.action === 'add') {
-        this.msg = 'Album was added';
-        this.isVisible = true;
+        this.alertMessage = 'Album is deleted';
         setTimeout(() => {
           this.isVisible = false;
         }, 2000);
       }
 
-      if (this.action == 'edited') {
-        this.msg = 'Album was edited';
+      if(data === 'add') {
         this.isVisible = true;
+        this.alertMessage = 'Album is added';
         setTimeout(() => {
           this.isVisible = false;
         }, 2000);
       }
-    });
+
+      if(data === 'editing') {
+        this.isVisible = true;
+        this.alertMessage = 'Album is editing'
+      }
+
+      if(data === 'cancel') {
+        this.isVisible = false;
+      }
+
+      if(data === 'edited') {
+        this.isVisible = true;
+        this.alertMessage = 'Album is edited';
+        setTimeout(() => {
+          this.isVisible = false;
+        }, 2000);
+      }
+    })
   }
+
 }

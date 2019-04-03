@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AlbumsService } from '../../services/albums.service';
-import { Album } from "../../interfaces/Album";
-import {AlbumEventsService} from "../../services/album-events.service";
-import {AlertMessageService} from "../../services/alert-message.service";
+import { AlbumsService } from "../../services/albums.service";
+import { MyAlbum } from "../../interface/MyAlbum";
+import { AlbumEventsService } from "../../services/album-events.service";
+import { OutputInfo } from "../../interface/OutputInfo";
 
 @Component({
   selector: 'app-albums-list',
@@ -10,36 +10,35 @@ import {AlertMessageService} from "../../services/alert-message.service";
   styleUrls: ['./albums-list.component.css']
 })
 export class AlbumsListComponent implements OnInit {
-  albums: Album[]=[];
-
+  albums: MyAlbum[] = [];
   constructor(
-    public albumService: AlbumsService,
-    public albumEvents: AlbumEventsService,
-    public alertMessage: AlertMessageService
+    private albumsService: AlbumsService,
+    private albumEvents: AlbumEventsService
   ) { }
 
   ngOnInit() {
-    this.albumService.getAlbums().subscribe((data: Album[]) => {
+    this.albumsService.getAlbums().subscribe((data: MyAlbum[]) => {
       this.albums = data;
-      console.log(data);
     }, (err) => {
       console.log(err);
     }, () => {
       console.log('complete');
     });
 
-    this.albumEvents.albumAddEventObservableSubject.subscribe((data: Album) => {
-      if (data.title) {
+    this.albumEvents.addAlbumEventObservableSubject.subscribe((data: MyAlbum) => {
+      if(data.title) {
         this.albums.unshift(data);
-        this.alertMessage.emitAddDeleteAlert('add');
       }
-    });
+    })
+
+  }
+  onOutputDelete(msg: OutputInfo) {
+    console.log(msg);
+    if(msg) {
+      this.albums = this.albums.filter((album) => {
+        return album.id != msg.id
+      });
+    }
   }
 
-  onDelete(msg) {
-    this.albumEvents.albumDeleteObservableSubject.subscribe( (albumId: number) => {
-      this.albums = this.albums.filter((album) => album.id != albumId);
-      this.alertMessage.emitAddDeleteAlert(msg);
-    });
-  }
 }
