@@ -1,4 +1,5 @@
 <div class="container mt-5">
+<<<<<<< HEAD
   <div class="col col-8 mx-auto">
     <div class="card">
       <div class="card-body">
@@ -15,6 +16,29 @@
           >
           <button (click)="onFormSubmit()" [disabled]="albumTitle.invalid" class="btn btn-success mt-3">{{album.buttonValue}}</button>
         </form>
+=======
+  <div class="row">
+    <div class="col col-8 mx-auto">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{formTitle}}</h5>
+          <form (ngSubmit)="onFormSubmit()" #addAlbumForm="ngForm">
+            <div class="alert alert-danger" *ngIf="albumTitle.invalid && albumTitle.dirty">Error message</div>
+
+            <input type="text"
+                   class="form-control"
+                   [(ngModel)]="album.title"
+                   name="title"
+                   placeholder="Album title"
+                   #albumTitle="ngModel"
+                   required
+                   maxlength="100"
+                   minlength="2"
+            >
+            <button class="btn btn-success mt-3" [disabled]="albumTitle.invalid">{{buttonValue}}</button>
+          </form>
+        </div>
+>>>>>>> 650e2d4105c93764f2300d10586974e7fd0cc1e4
       </div>
     </div>
   </div>

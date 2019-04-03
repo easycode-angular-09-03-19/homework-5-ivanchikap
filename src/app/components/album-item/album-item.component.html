@@ -1,8 +1,15 @@
 <div class="card mb-3">
   <div class="card-body">
+<<<<<<< HEAD
     <h5 class="card-title">User id: {{item.id}}</h5>
     <p class="card-text">Title: {{item.title}}</p>
     <button (click)="onEdit()" class="btn btn-primary">{{buttonValue}}</button>
     <button [disabled]="isPressed" (click)="onDelete()" class="btn btn-warning ml-3">Delete</button>
+=======
+    <h5 class="card-title">User id: {{ item.id }}</h5>
+    <p class="card-text">Title: {{ item.title }}</p>
+    <button (click)="onEditHandler()" class="btn btn-primary">{{buttonValue}}</button>
+    <button [disabled]="editIsPressed" (click)="onDeleteHandler()" class="btn btn-warning ml-2">Delete</button>
+>>>>>>> 650e2d4105c93764f2300d10586974e7fd0cc1e4
   </div>
 </div>
