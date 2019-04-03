@@ -1,0 +1,21 @@
+<div class="container mt-5">
+  <div class="col col-8 mx-auto">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title">{{album.cardTitle}}</div>
+        <form #addAlbumForm="ngForm" (ngSubmit)="onFormSubmit()">
+          <div *ngIf="addAlbumForm.invalid && addAlbumForm.dirty" class="alert alert-danger">Error message</div>
+          <input
+            [(ngModel)]="album.title" name="title" type="text"
+            #albumTitle="ngModel"
+            class="form-control" placeholder="Album title"
+            required
+            minlength="2"
+            maxlength="100"
+          >
+          <button (click)="onFormSubmit()" [disabled]="albumTitle.invalid" class="btn btn-success mt-3">{{album.buttonValue}}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

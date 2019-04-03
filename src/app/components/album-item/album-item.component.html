@@ -1,0 +1,8 @@
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">User id: {{item.id}}</h5>
+    <p class="card-text">Title: {{item.title}}</p>
+    <button (click)="onEdit()" class="btn btn-primary">{{buttonValue}}</button>
+    <button [disabled]="isPressed" (click)="onDelete()" class="btn btn-warning ml-3">Delete</button>
+  </div>
+</div>
