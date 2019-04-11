@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AlbumsService } from "../../services/albums.service";
 import { MyAlbum } from "../../interface/MyAlbum";
 import { AlbumEventsService } from "../../services/album-events.service";
-import { OutputInfo } from "../../interface/OutputInfo";
 
 @Component({
   selector: 'app-albums-list',
@@ -29,16 +28,14 @@ export class AlbumsListComponent implements OnInit {
       if(data.title) {
         this.albums.unshift(data);
       }
-    })
-
+    });
   }
-  onOutputDelete(msg: OutputInfo) {
-    console.log(msg);
-    if(msg) {
+
+  onOutputDelete(id: number) {
+    if(id) {
       this.albums = this.albums.filter((album) => {
-        return album.id != msg.id
+        return album.id !== id;
       });
     }
   }
-
 }

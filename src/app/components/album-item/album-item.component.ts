@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { MyAlbum } from "../../interface/MyAlbum";
 import { AlbumsService } from "../../services/albums.service";
-import {AlertMessageService} from "../../services/alert-message.service";
-import {AlbumEventsService} from "../../services/album-events.service";
+import { AlertMessageService } from "../../services/alert-message.service";
+import { AlbumEventsService } from "../../services/album-events.service";
 
 @Component({
   selector: 'app-album-item',
@@ -27,29 +27,28 @@ export class AlbumItemComponent implements OnInit {
         this.isPressed = false;
         this.buttonValue = 'Edit';
       }
-    })
+    });
   }
 
   onDelete() {
     this.albumsService.deleteAlbum(this.item.id).subscribe((data) => {
       if(data) {
-        this.info.emit({method: 'delete', id: this.item.id});
-
-        this.alertMessageService.emitShowMessage('delete');
+        this.info.emit(this.item.id);
+        this.alertMessageService.emitShowMessage({message: 'Album is deleted', type: 'alert-danger', timeOut: true});
       }
     });
   }
 
   onEdit() {
-    if (this.buttonValue == 'Edit') {
+    if (this.buttonValue === 'Edit') {
       this.buttonValue = 'Cancel';
       this.isPressed = true;
-      this.alertMessageService.emitShowMessage('editing');
+      this.alertMessageService.emitShowMessage({message: 'Album is editing', type: 'alert-info', timeOut: false});
       this.albumEvents.emitEditAlbum(this.item);
     } else {
       this.buttonValue = 'Edit';
       this.isPressed = false;
-      this.alertMessageService.emitShowMessage('cancel');
+      this.alertMessageService.emitShowMessage({message: 'Editing is canceled', type: 'alert-success', timeOut: true});
       this.albumEvents.emitCancelEditing(this.item);
     }
   }

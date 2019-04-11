@@ -1,1 +1,8 @@
-<div *ngIf="isVisible" class="customAlert alert alert-danger text-center mx-auto" style="width: 25%">{{alertMessage}}</div>
+<div
+  *ngIf="isVisible"
+  [ngClass]="alertClass"
+  class="customAlert alert text-center mx-auto"
+  style="width: 25%"
+>
+  {{alertMessage}}
+</div>

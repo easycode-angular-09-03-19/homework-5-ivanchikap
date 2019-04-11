@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertMessageService } from "../../services/alert-message.service";
+import {AlertMessage} from "../../interface/AlertMessage";
 
 @Component({
   selector: 'app-alert-message',
@@ -7,47 +8,23 @@ import { AlertMessageService } from "../../services/alert-message.service";
   styleUrls: ['./alert-message.component.css']
 })
 export class AlertMessageComponent implements OnInit {
-  isVisible = false;
+  isVisible = true;
   alertMessage = '';
+  alertClass = '';
   constructor(
     private alertMessagesService: AlertMessageService
   ) { }
 
   ngOnInit() {
-    this.alertMessagesService.alertMessageAddObservableSubject.subscribe((data: string) => {
-      if (data === 'delete') {
+    this.alertMessagesService.alertMessageAddObservableSubject.subscribe((data: AlertMessage) => {
+      if (Object.keys(data).length !== 0) {
         this.isVisible = true;
-        this.alertMessage = 'Album is deleted';
+        this.alertMessage = data.message;
+        this.alertClass = data.type;
         setTimeout(() => {
-          this.isVisible = false;
+          this.isVisible = !data.timeOut;
         }, 2000);
       }
-
-      if(data === 'add') {
-        this.isVisible = true;
-        this.alertMessage = 'Album is added';
-        setTimeout(() => {
-          this.isVisible = false;
-        }, 2000);
-      }
-
-      if(data === 'editing') {
-        this.isVisible = true;
-        this.alertMessage = 'Album is editing'
-      }
-
-      if(data === 'cancel') {
-        this.isVisible = false;
-      }
-
-      if(data === 'edited') {
-        this.isVisible = true;
-        this.alertMessage = 'Album is edited';
-        setTimeout(() => {
-          this.isVisible = false;
-        }, 2000);
-      }
-    })
+    });
   }
-
 }

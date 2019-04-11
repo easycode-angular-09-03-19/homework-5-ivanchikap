@@ -2,7 +2,7 @@
   <div class="col col-8 mx-auto">
     <div class="card">
       <div class="card-body">
-        <div class="card-title">{{album.cardTitle}}</div>
+        <div class="card-title">{{isEditingNow ? "Edit album" : "Add new Album"}}</div>
         <form #addAlbumForm="ngForm" (ngSubmit)="onFormSubmit()">
           <div *ngIf="addAlbumForm.invalid && addAlbumForm.dirty" class="alert alert-danger">Error message</div>
           <input
@@ -13,7 +13,13 @@
             minlength="2"
             maxlength="100"
           >
-          <button (click)="onFormSubmit()" [disabled]="albumTitle.invalid" class="btn btn-success mt-3">{{album.buttonValue}}</button>
+          <button
+            (click)="onFormSubmit()"
+            [disabled]="albumTitle.invalid"
+            class="btn btn-success mt-3"
+          >
+            {{isEditingNow ? "Save" : "Submit"}}
+          </button>
         </form>
       </div>
     </div>

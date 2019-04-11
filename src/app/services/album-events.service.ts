@@ -34,7 +34,6 @@ export class AlbumEventsService {
   }
 
   emitFinishEditAlbum(value: MyAlbum) {
-    console.log('ALBUMEvents', value);
     this.finishEditAlbumEventSource.next(value);
   }
 
